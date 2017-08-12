@@ -177,9 +177,9 @@ namespace grade_scores
                 Name tempName = new Name(temp[1],temp[0],tempInt);
                 names.Add(tempName);
             }
-            names = Sort(names);
-            names = Sort(names, false);
-            names = Sort(names, true);
+            names = Sort(names); // sort by score
+            names = Sort(names, false);//sort by surname
+            names = Sort(names, true); // sort by first
 
             return names;
         }
