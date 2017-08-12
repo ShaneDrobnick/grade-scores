@@ -17,18 +17,15 @@ namespace grade_scores
             string[] commandline = Environment.GetCommandLineArgs();
             try
             {
-                //Console.WriteLine(commandline[1]);
+
                 if (File.Exists(commandline[1]))
                 {
                     string fileDirectory = string.Empty;
-                    //string namesList = string.Empty;
 
-                    //string[] filenametempsplit = Path.GetFileName(commandline[1]).Split('.');
-                    //string filenametemp = filenametempsplit[0];
 
                     List<string> fileLines = new List<string>();
 
-                    //need to add a check file exists etc and is complant etc here
+
                     var fileStream = new FileStream(commandline[1], FileMode.Open, FileAccess.Read);
 
 
