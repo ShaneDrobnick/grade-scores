@@ -5,6 +5,7 @@ using System.Text;
 //using System.Threading.Tasks;
 
 using System.IO;
+using System.Runtime.Serialization;
 
 namespace grade_scores
 {
@@ -12,7 +13,6 @@ namespace grade_scores
     {
         static void Main(string[] args)
         {
-
 
             string[] commandline = Environment.GetCommandLineArgs();
             try
@@ -38,20 +38,9 @@ namespace grade_scores
                         }
                     }
 
-                    //namesList = fileLines.ToArray();
                     List<Name> names = MakeNameList(fileLines);
                     WriteNamesToFile(names, commandline[1]);
 
-                    /*
-                    foreach (string item in fileLines)
-                    {
-                        Console.WriteLine(item);
-                        makeNameArray();
-                    }
-                    */
-
-                    //writeNamesToFile();
-                    //UnitTests.nameObjectTest();
                 }
                 else
                 {
@@ -61,18 +50,20 @@ namespace grade_scores
             }
             catch(IndexOutOfRangeException ex)
             {
-                Console.WriteLine("No file name given at commandline please give a file location");
+                Console.WriteLine("No file name given at commandline please give a file location - Exiting Program");
             }
             catch(FileNotFoundException ex)
             {
-                Console.WriteLine("File not found - {0}", commandline[1]);
+                Console.WriteLine("File not found - {0}  - Exiting Program", commandline[1]);
             }
-
-
-
-
-
-
+            catch(FileFormatIncorrectException ex)
+            {
+                Console.WriteLine("Format of Input file is incorrect  - Exiting Program");
+            }
+            catch (ScoreValueIncorrectFormat ex)
+            {
+                Console.WriteLine("Score value input is not a number  - Exiting Program"); ;
+            }
 
         }
         //Method Writes array to file
@@ -80,12 +71,9 @@ namespace grade_scores
         {
             /*
              * assumption specifications does not give an outfile location, since there is none 
-             * I could just dump it in default directory but for simplicity since the question asks for a file in from
-             * C: I will output back to C: but this is an ambiguity issue, I could have it take the drive letter 
-             * from the input arg and reuse that but this is going even more off the specs I have been given
+             * using the input location as the output
              */
             
-            //change the e back after test
             using (StreamWriter writer = new StreamWriter(filename+"-graded.txt"))
             {
                 Console.WriteLine();
@@ -100,7 +88,7 @@ namespace grade_scores
 
                 Console.WriteLine("Finished: created {0}",filename+"-graded.txt");
             }
-           //Console.WriteLine("called");
+
         }
         //Sorts list in order for highest score
         // Bubble sorting  yes not efficient but no specs given on efficiency 
@@ -136,7 +124,6 @@ namespace grade_scores
                 {
                     if ( which == false)
                     {
-                        //if (names[i].Score < names[k].Score)
                         if(CheckNameOrder(names[i].Last,names[k].Last) == 1 && names[i].Score == names[k].Score)
                         {
                             temp = names[i];
@@ -168,20 +155,38 @@ namespace grade_scores
 
             List<Name> names = new List<Name>();
 
-            foreach (string item in lines)
+            try
             {
-                int tempInt = 0;
-                string[] temp = item.Split(',');
-                //add a check here incase it cant convert to an int!!
-                Int32.TryParse(temp[2], out tempInt);
-                Name tempName = new Name(temp[1],temp[0],tempInt);
-                names.Add(tempName);
-            }
-            names = Sort(names); // sort by score
-            names = Sort(names, false);//sort by surname
-            names = Sort(names, true); // sort by first
+                foreach (string item in lines)
+                {
+                    int tempInt = -1;
+                    string[] temp = item.Split(',');
+                    //add a check here incase it cant convert to an int!!
+                    if (Int32.TryParse(temp[2], out tempInt) == true)
+                    {
+                        Int32.TryParse(temp[2], out tempInt);
+                        Name tempName = new Name(temp[1], temp[0], tempInt);
+                        names.Add(tempName);
+                    }
+                    else
+                    {
+                        throw new ScoreValueIncorrectFormat("Score value is not a number");
+                    }
+                }
 
-            return names;
+
+
+                names = Sort(names); // sort by score
+                names = Sort(names, false);//sort by surname
+                names = Sort(names, true); // sort by first
+
+                return names;
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                throw new FileFormatIncorrectException("Input File Format Incorrect");
+            }
+
         }
         // checks string for alphabetical order
         //if a comes before b 
@@ -195,4 +200,6 @@ namespace grade_scores
             return result;
         }
     }
+
+  
 }
