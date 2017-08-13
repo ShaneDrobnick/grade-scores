@@ -67,7 +67,7 @@ namespace grade_scores
 
         }
         //Method Writes array to file
-        public static void WriteNamesToFile(List<Name> names,string filename)
+        private static void WriteNamesToFile(List<Name> names,string filename)
         {
             /*
              * assumption specifications does not give an outfile location, since there is none 
@@ -92,7 +92,7 @@ namespace grade_scores
         }
         //Sorts list in order for highest score
         // Bubble sorting  yes not efficient but no specs given on efficiency 
-        public static List<Name>Sort(List<Name> names)
+        private static List<Name>Sort(List<Name> names)
         {
             Name temp;
 
@@ -113,7 +113,7 @@ namespace grade_scores
         }
         //Sorts list by given name first or last if the scores are the same
         // true = first , false = surname
-        public static List<Name>Sort(List<Name> names, bool which)
+        private static List<Name>Sort(List<Name> names, bool which)
         {
 
             Name temp;

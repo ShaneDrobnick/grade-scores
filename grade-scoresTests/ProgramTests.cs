@@ -5,19 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using grade_scores;
+
 
 namespace grade_scores.Tests
 {
     [TestClass()]
     public class ProgramTests
     {
+        /*
         [TestMethod()]
         public void WriteNamesToFileTest()
         {
             // Not Implemented
             Assert.Fail();
         }
+        
 
         [TestMethod()]
         public void SortTest()
@@ -32,6 +34,7 @@ namespace grade_scores.Tests
             // Not Implemented
             Assert.Fail();
         }
+        */
 
         [TestMethod()]
         public void MakeNameListTest()
